@@ -11,9 +11,9 @@
  */
 /*	ELEMENTS =   100 000	TIMES =    10
 	std::set<> results: ~more memory usage
-		Test addOutputs    :: Average time:    91 milliseconds :: (min=   78, max=   93)
-		Test emit          :: Average time:     3 milliseconds :: (min=    0, max=   15)
-		Test removeOutputs :: Average time:    84 milliseconds :: (min=   78, max=   94)
+		Test addOutputs    :: Average time:    91 milliseconds :: (min=    78, max=    93)
+		Test emit          :: Average time:     3 milliseconds :: (min=     0, max=    15)
+		Test removeOutputs :: Average time:    84 milliseconds :: (min=    78, max=    94)
 
 	std::forward_list<> results: >>>>time on remove usage
 		Test addOutputs    :: Average time:    78 milliseconds :: (min=    78, max=    78)
@@ -22,9 +22,9 @@
 */
 /*	ELEMENTS = 1 000 000	TIMES =    10
 	std::set<> results: ~more memory usage
-		Test addInputs   :: Average time:     938 milliseconds :: (min=  922, max=  969)
-		Test emit        :: Average time:      38 milliseconds :: (min=   31, max=   46)
-		Test removeInput :: Average time:     848 milliseconds :: (min=  842, max=  860)
+		Test addOutputs    :: Average time:   938 milliseconds :: (min=   922, max=   969)
+		Test emit 		   :: Average time:    38 milliseconds :: (min=    31, max=    46)
+		Test removeOutputs :: Average time:   848 milliseconds :: (min=   842, max=   860)
 
 	std::forward_list<> results:
 		5+ hours?!
