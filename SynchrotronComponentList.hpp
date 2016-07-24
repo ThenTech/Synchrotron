@@ -8,8 +8,8 @@
 #include <iostream> // For testing for now
 
 #include <bitset>
-//#include <forward_list> // faster iteration?  TODO run test!!
-#include <set>
+#include <forward_list> // faster iteration?  TODO run test!!
+//#include <set>
 #include <mutex>
 
 namespace Synchrotron {
@@ -59,14 +59,14 @@ namespace Synchrotron {
 			 *
 			 *		Emit this.signal to subscribers in slotOutput.
 			 */
-			std::set<SynchrotronComponent*> slotOutput;
+			std::forward_list<SynchrotronComponent*> slotOutput;
 
 			/**	\brief
 			 *	**Signals == inputs**
 			 *
 			 *		Receive tick()s from these subscriptions in signalInput.
 			 */
-			std::set<SynchrotronComponent*> signalInput;
+			std::forward_list<SynchrotronComponent*> signalInput;
 
             /**	\brief	Connect a new slot s:
              *		* Add s to this SynchrotronComponent's outputs.
@@ -78,8 +78,8 @@ namespace Synchrotron {
 			inline void connectSlot(SynchrotronComponent* s) {
 				//LockBlock lock(this);
 
-				this->slotOutput.insert(s);
-				s->signalInput.insert(this);
+				this->slotOutput.push_front(s);
+				s->signalInput.push_front(this);
 			}
 
             /**	\brief	Disconnect a slot s:
@@ -92,8 +92,8 @@ namespace Synchrotron {
 			inline void disconnectSlot(SynchrotronComponent* s) {
 				//LockBlock lock(this);
 
-				this->slotOutput.erase(s);
-				s->signalInput.erase(this);
+				this->slotOutput.remove(s);
+				s->signalInput.remove(this);
 			}
 
 		public:
@@ -121,15 +121,15 @@ namespace Synchrotron {
 
 				// Copy subscribers
 				for(auto& connection : sc.slotOutput) {
-					connection->signalInput.insert(this);
-					this->slotOutput.insert(connection);
+					this->slotOutput.push_front(connection);
+					connection->signalInput.push_front(this);
 				}
 
 				if (duplicateAll_IO) {
 					// Copy subscriptions
 					for(auto& sender : sc.signalInput) {
-						sender->slotOutput.insert(this);
-						this->signalInput.insert(sender);
+						sender->slotOutput.push_front(this);
+						this->signalInput.push_front(sender);
 					}
 				}
 			}
@@ -143,13 +143,13 @@ namespace Synchrotron {
 
 				// Disconnect all Slots
 				for(auto& connection : this->slotOutput) {
-					connection->signalInput.erase(this);
+					((SynchrotronComponent*)connection)->signalInput.remove(this);
 					//delete connection; //?
 				}
 
 				// Disconnect all Signals
 				for(auto &sender: this->signalInput) {
-					sender->slotOutput.erase(this);
+					((SynchrotronComponent*)sender)->signalInput.remove(this);
 				}
 
 				this->slotOutput.clear();
