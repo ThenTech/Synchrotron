@@ -114,22 +114,20 @@ namespace Synchrotron {
 			 *	\param	sc const
 			 *		The other SynchrotronComponent to duplicate the connections from.
 			 *	\param	duplicateAll_IO
-			 *		Specifies whether to only copy outputs (false) or inputs as well (true).
+			 *		Specifies whether to only copy inputs (false) or outputs as well (true).
 			 */
 			SynchrotronComponent(const SynchrotronComponent& sc, bool duplicateAll_IO = false) : SynchrotronComponent() {
 				LockBlock lock(this);
 
-				// Copy subscribers
-				for(auto& connection : sc.slotOutput) {
-					connection->signalInput.insert(this);
-					this->slotOutput.insert(connection);
+				// Copy subscriptions
+				for(auto& sender : sc.signalInput) {
+					sender->connectSlot(this);
 				}
 
 				if (duplicateAll_IO) {
-					// Copy subscriptions
-					for(auto& sender : sc.signalInput) {
-						sender->slotOutput.insert(this);
-						this->signalInput.insert(sender);
+					// Copy subscribers
+					for(auto& connection : sc.slotOutput) {
+						this->connectSlot(connection);
 					}
 				}
 			}

@@ -3,7 +3,7 @@
 #include <vector>
 
 #define TEST_PERFORMANCE
-//#define TEST_SET
+#define TEST_SET
 #define ELEMENTS	100000
 #define TIMES		10
 /*
@@ -57,8 +57,8 @@ void printResults(std::vector<size_t>& v) {
 
 int main() {
 #ifndef TEST_PERFORMANCE
-	SynchrotronComponent<2> slot(1);
-	SynchrotronComponent<2> signal(2);
+	SynchrotronComponent<4> slot(1);
+	SynchrotronComponent<4> signal(2);
 
 	slot.addInput(signal);
 	//signal.addOutput(slot);
@@ -68,8 +68,12 @@ int main() {
 
 	//signal.tick();
 	signal.emit();
-
 	std::cout << slot.getState() << std::endl;
+
+	SynchrotronComponent<4> dupslot(slot);
+	std::cout << dupslot.getState() << std::endl;
+	signal.emit();
+	std::cout << dupslot.getState() << std::endl;
 #else
 	std::cout << "Starting tests...\n";
 	std::vector<size_t> runtimes_addOutputs, runtimes_Emit, runtimes_removeOutputs;
