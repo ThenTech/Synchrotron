@@ -2,6 +2,7 @@ var class_synchrotron_1_1_synchrotron_component =
 [
     [ "SynchrotronComponent", "class_synchrotron_1_1_synchrotron_component.html#a5784a1b0228095a1d933d7dde19350bf", null ],
     [ "SynchrotronComponent", "class_synchrotron_1_1_synchrotron_component.html#acf69ef92b7eafb01b26af10956c017a5", null ],
+    [ "SynchrotronComponent", "class_synchrotron_1_1_synchrotron_component.html#a09303f8845440baa1d26e6f26a718a51", null ],
     [ "~SynchrotronComponent", "class_synchrotron_1_1_synchrotron_component.html#a214b75178ee04682ba67cd5fcf3e0180", null ],
     [ "addInput", "class_synchrotron_1_1_synchrotron_component.html#af71d2e3d9052947474004a8e4c6768c9", null ],
     [ "addInput", "class_synchrotron_1_1_synchrotron_component.html#ad86e2faa1c6f4f83d53cff4239372218", null ],

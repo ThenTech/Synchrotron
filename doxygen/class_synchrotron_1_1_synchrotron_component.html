@@ -68,6 +68,7 @@ $(document).ready(function(){initNavTree('class_synchrotron_1_1_synchrotron_comp
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_synchrotron_1_1_synchrotron_component-members.html">List of all members</a>  </div>
@@ -98,6 +99,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acf69ef92b7eafb01b26af10956c017a5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchrotron_1_1_synchrotron_component.html#acf69ef92b7eafb01b26af10956c017a5">SynchrotronComponent</a> (const <a class="el" href="class_synchrotron_1_1_synchrotron_component.html">SynchrotronComponent</a> &amp;sc, bool duplicateAll_IO=false)</td></tr>
 <tr class="memdesc:acf69ef92b7eafb01b26af10956c017a5"><td class="mdescLeft">&#160;</td><td class="mdescRight"><b>[Thread safe]</b> Copy constructor  <a href="#acf69ef92b7eafb01b26af10956c017a5">More...</a><br /></td></tr>
 <tr class="separator:acf69ef92b7eafb01b26af10956c017a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09303f8845440baa1d26e6f26a718a51"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchrotron_1_1_synchrotron_component.html#a09303f8845440baa1d26e6f26a718a51">SynchrotronComponent</a> (std::initializer_list&lt; <a class="el" href="class_synchrotron_1_1_synchrotron_component.html">SynchrotronComponent</a> * &gt; inputList, std::initializer_list&lt; <a class="el" href="class_synchrotron_1_1_synchrotron_component.html">SynchrotronComponent</a> * &gt; outputList={})</td></tr>
+<tr class="memdesc:a09303f8845440baa1d26e6f26a718a51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connection constructor.  <a href="#a09303f8845440baa1d26e6f26a718a51">More...</a><br /></td></tr>
+<tr class="separator:a09303f8845440baa1d26e6f26a718a51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a214b75178ee04682ba67cd5fcf3e0180"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchrotron_1_1_synchrotron_component.html#a214b75178ee04682ba67cd5fcf3e0180">~SynchrotronComponent</a> ()</td></tr>
 <tr class="memdesc:a214b75178ee04682ba67cd5fcf3e0180"><td class="mdescLeft">&#160;</td><td class="mdescRight"><b>[Thread safe]</b> Default destructor  <a href="#a214b75178ee04682ba67cd5fcf3e0180">More...</a><br /></td></tr>
 <tr class="separator:a214b75178ee04682ba67cd5fcf3e0180"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,6 +153,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7aa3272f88cf2e1ffe227312abd3c30d inherit pub_methods_class_synchrotron_1_1_mutex"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchrotron_1_1_mutex.html#a7aa3272f88cf2e1ffe227312abd3c30d">unlock</a> ()</td></tr>
 <tr class="separator:a7aa3272f88cf2e1ffe227312abd3c30d inherit pub_methods_class_synchrotron_1_1_mutex"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a760ae4bdd17706aada3ad674f79bb9ed"><td class="memItemLeft" align="right" valign="top">std::bitset&lt; bit_width &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchrotron_1_1_synchrotron_component.html#a760ae4bdd17706aada3ad674f79bb9ed">state</a></td></tr>
+<tr class="memdesc:a760ae4bdd17706aada3ad674f79bb9ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current internal state of bits in this component (default output).  <a href="#a760ae4bdd17706aada3ad674f79bb9ed">More...</a><br /></td></tr>
+<tr class="separator:a760ae4bdd17706aada3ad674f79bb9ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:acbc590aa96041966f775ad869dd3a555"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchrotron_1_1_synchrotron_component.html#acbc590aa96041966f775ad869dd3a555">connectSlot</a> (<a class="el" href="class_synchrotron_1_1_synchrotron_component.html">SynchrotronComponent</a> *s)</td></tr>
@@ -160,9 +170,6 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a760ae4bdd17706aada3ad674f79bb9ed"><td class="memItemLeft" align="right" valign="top">std::bitset&lt; bit_width &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchrotron_1_1_synchrotron_component.html#a760ae4bdd17706aada3ad674f79bb9ed">state</a></td></tr>
-<tr class="memdesc:a760ae4bdd17706aada3ad674f79bb9ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current internal state of bits in this component (default output).  <a href="#a760ae4bdd17706aada3ad674f79bb9ed">More...</a><br /></td></tr>
-<tr class="separator:a760ae4bdd17706aada3ad674f79bb9ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6730bab18d13d07e4bc914702f1f8cc7"><td class="memItemLeft" align="right" valign="top">std::set&lt; <a class="el" href="class_synchrotron_1_1_synchrotron_component.html">SynchrotronComponent</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_synchrotron_1_1_synchrotron_component.html#a6730bab18d13d07e4bc914702f1f8cc7">slotOutput</a></td></tr>
 <tr class="memdesc:a6730bab18d13d07e4bc914702f1f8cc7"><td class="mdescLeft">&#160;</td><td class="mdescRight"><b>Slots == outputs</b>  <a href="#a6730bab18d13d07e4bc914702f1f8cc7">More...</a><br /></td></tr>
 <tr class="separator:a6730bab18d13d07e4bc914702f1f8cc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -260,6 +267,55 @@ template&lt;size_t bit_width&gt; </div>
   <table class="params">
     <tr><td class="paramname">sc</td><td>const The other <a class="el" href="class_synchrotron_1_1_synchrotron_component.html" title="SynchrotronComponent is the base for all components, offering in and output connections to other Sync...">SynchrotronComponent</a> to duplicate the connections from. </td></tr>
     <tr><td class="paramname">duplicateAll_IO</td><td>Specifies whether to only copy inputs (false) or outputs as well (true). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a09303f8845440baa1d26e6f26a718a51"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t bit_width&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_synchrotron_1_1_synchrotron_component.html">Synchrotron::SynchrotronComponent</a>&lt; bit_width &gt;::<a class="el" href="class_synchrotron_1_1_synchrotron_component.html">SynchrotronComponent</a> </td>
+          <td>(</td>
+          <td class="paramtype">std::initializer_list&lt; <a class="el" href="class_synchrotron_1_1_synchrotron_component.html">SynchrotronComponent</a>&lt; bit_width &gt; * &gt;&#160;</td>
+          <td class="paramname"><em>inputList</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::initializer_list&lt; <a class="el" href="class_synchrotron_1_1_synchrotron_component.html">SynchrotronComponent</a>&lt; bit_width &gt; * &gt;&#160;</td>
+          <td class="paramname"><em>outputList</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Connection constructor. </p>
+<ul>
+<li>Adds signal subscriptions from inputList</li>
+<li>Optionally adds slot subscribers from outputList</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">inputList</td><td>The list of SynchrotronComponents to connect as input. </td></tr>
+    <tr><td class="paramname">outputList</td><td>The list of SynchrotronComponents to connect as output.. </td></tr>
   </table>
   </dd>
 </dl>
@@ -816,7 +872,7 @@ template&lt;size_t bit_width&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

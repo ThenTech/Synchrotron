@@ -48,12 +48,13 @@ namespace Synchrotron {
      */
 	template <size_t bit_width>
 	class SynchrotronComponent : public Mutex {
-		private:
+		protected:
 			/**	\brief
 			 *	The current internal state of bits in this component (default output).
 			 */
 			std::bitset<bit_width> state;
 
+		private:
 			/**	\brief
 			 *	**Slots == outputs**
 			 *
@@ -130,6 +131,23 @@ namespace Synchrotron {
 						this->connectSlot(connection);
 					}
 				}
+			}
+
+			/**	\brief
+			 *	Connection constructor
+			 *	*	Adds signal subscriptions from inputList
+			 *	*	Optionally adds slot subscribers from outputList
+			 *
+			 *	\param	inputList
+			 *		The list of SynchrotronComponents to connect as input.
+			 *	\param	outputList
+			 *		The list of SynchrotronComponents to connect as output..
+			 */
+			SynchrotronComponent(std::initializer_list<SynchrotronComponent*> inputList,
+								 std::initializer_list<SynchrotronComponent*> outputList = {})
+									: SynchrotronComponent() {
+				this->addInput(inputList);
+				this->addOutput(outputList);
 			}
 
 			/** \brief	**[Thread safe]** Default destructor
