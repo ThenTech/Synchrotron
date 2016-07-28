@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <vector>
 
-#define TEST_PERFORMANCE
+//#define TEST_PERFORMANCE
 #define TEST_SET
 #define ELEMENTS	100000
 #define TIMES		10
@@ -73,6 +73,14 @@ int main() {
 	std::cout << dupslot.getState() << std::endl;
 	signal.emit();
 	std::cout << dupslot.getState() << std::endl;
+
+	SynchrotronComponent<4> s1(8), s2(8), s3(8), s4(8);
+	std::cout << "Size: " << signal.getOutputs().size() << std::endl;
+	signal.addOutput( {&s1, &s2, &s3, &s4} );
+    std::cout << "Size: " << signal.getOutputs().size() << std::endl;
+    signal.emit();
+    std::cout << s1.getState() << std::endl;
+
 #else
 	std::cout << "Starting tests...\n";
 	std::vector<size_t> runtimes_addOutputs, runtimes_Emit, runtimes_removeOutputs;

@@ -9,6 +9,7 @@
 
 #include <bitset>
 #include <set>
+#include <initializer_list>
 #include <mutex>
 
 namespace Synchrotron {
@@ -185,23 +186,23 @@ namespace Synchrotron {
 				return this->state;
 			}
 
-//			/*	\brief	Gets the SynchrotronComponent's input connections.
-//             *
-//             *	\return	std::set<SynchrotronComponent*>&
-//             *      Returns a reference set to this SynchrotronComponent's inputs.
-//             */
-//			std::set<SynchrotronComponent*>& getIputs() const {
-//				return this->signalInput;
-//			}
-//
-//			/*	\brief	Gets the SynchrotronComponent's output connections.
-//             *
-//             *	\return	std::set<SynchrotronComponent*>&
-//             *      Returns a reference set to this SynchrotronComponent's outputs.
-//             */
-//			std::set<SynchrotronComponent*>& getOutputs() const {
-//				return this->slotOutput;
-//			}
+			/**	\brief	Gets the SynchrotronComponent's input connections.
+             *
+             *	\return	std::set<SynchrotronComponent*>&
+             *      Returns a reference set to this SynchrotronComponent's inputs.
+             */
+			const std::set<SynchrotronComponent*>& getIputs() {
+				return this->signalInput;
+			}
+
+			/**	\brief	Gets the SynchrotronComponent's output connections.
+             *
+             *	\return	std::set<SynchrotronComponent*>&
+             *      Returns a reference set to this SynchrotronComponent's outputs.
+             */
+			const std::set<SynchrotronComponent*>& getOutputs() {
+				return this->slotOutput;
+			}
 
             /**	\brief	**[Thread safe]** Adds/Connects a new input to this SynchrotronComponent.
              *
@@ -216,6 +217,18 @@ namespace Synchrotron {
 
 				// deprecated? //if (!this->hasSameWidth(input)) return false;
 				input.connectSlot(this);
+			}
+
+			/**	\brief	Adds/Connects a list of new inputs to this SynchrotronComponent.
+             *
+             *	Calls addInput() on each SynchrotronComponent* in inputList.
+             *
+             *	\param	inputList
+             *		The list of SynchrotronComponents to connect as input.
+             */
+			void addInput(std::initializer_list<SynchrotronComponent*> inputList) {
+				for(auto connection : inputList)
+					this->addInput(*connection);
 			}
 
             /**	\brief	**[Thread safe]** Removes/Disconnects an input to this SynchrotronComponent.
@@ -245,6 +258,18 @@ namespace Synchrotron {
 
 				// deprecated? //if (!this->hasSameWidth(*output)) return false;
 				this->connectSlot(&output);
+			}
+
+			/**	\brief	Adds/Connects a list of new outputs to this SynchrotronComponent.
+             *
+             *	Calls addOutput() on each SynchrotronComponent* in outputList.
+             *
+             *	\param	outputList
+             *		The list of SynchrotronComponents to connect as output.
+             */
+			void addOutput(std::initializer_list<SynchrotronComponent*> outputList) {
+				for(auto connection : outputList)
+					this->addOutput(*connection);
 			}
 
 			/**	\brief	**[Thread safe]** Removes/Disconnects an output to this SynchrotronComponent.

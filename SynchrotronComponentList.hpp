@@ -186,23 +186,23 @@ namespace Synchrotron {
 				return this->state;
 			}
 
-//			/*	\brief	Gets the SynchrotronComponent's input connections.
-//             *
-//             *	\return	std::set<SynchrotronComponent*>&
-//             *      Returns a reference set to this SynchrotronComponent's inputs.
-//             */
-//			std::set<SynchrotronComponent*>& getIputs() const {
-//				return this->signalInput;
-//			}
-//
-//			/*	\brief	Gets the SynchrotronComponent's output connections.
-//             *
-//             *	\return	std::set<SynchrotronComponent*>&
-//             *      Returns a reference set to this SynchrotronComponent's outputs.
-//             */
-//			std::set<SynchrotronComponent*>& getOutputs() const {
-//				return this->slotOutput;
-//			}
+			/**	\brief	Gets the SynchrotronComponent's input connections.
+             *
+             *	\return	std::set<SynchrotronComponent*>&
+             *      Returns a reference set to this SynchrotronComponent's inputs.
+             */
+			const std::set<SynchrotronComponent*>& getIputs() {
+				return this->signalInput;
+			}
+
+			/**	\brief	Gets the SynchrotronComponent's output connections.
+             *
+             *	\return	std::set<SynchrotronComponent*>&
+             *      Returns a reference set to this SynchrotronComponent's outputs.
+             */
+			const std::set<SynchrotronComponent*>& getOutputs() {
+				return this->slotOutput;
+			}
 
             /**	\brief	Adds/Connects a new input to this SynchrotronComponent.
              *
