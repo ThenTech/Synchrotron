@@ -8,7 +8,6 @@
 #include <iostream> // For testing for now
 
 #include <bitset>
-//#include <forward_list> // faster iteration?  TODO run test!!
 #include <set>
 #include <mutex>
 
@@ -106,7 +105,7 @@ namespace Synchrotron {
              */
 			SynchrotronComponent(size_t initial_value = 0) : state(initial_value) {}
 
-			/**	\brief
+			/**	\brief **[Thread safe]**
 			 *	Copy constructor
 			 *	*	Duplicates signal subscriptions (inputs)
 			 *	*	Optionally also duplicates slot connections (outputs)
@@ -132,7 +131,7 @@ namespace Synchrotron {
 				}
 			}
 
-			/** \brief	Default destructor
+			/** \brief	**[Thread safe]** Default destructor
 			 *
 			 *		When called, will disconnect all in and output connections to this SynchrotronComponent.
              */
@@ -204,7 +203,7 @@ namespace Synchrotron {
 //				return this->slotOutput;
 //			}
 
-            /**	\brief	Adds/Connects a new input to this SynchrotronComponent.
+            /**	\brief	**[Thread safe]** Adds/Connects a new input to this SynchrotronComponent.
              *
              *	**Ensures both way connection will be made:**
              *	This will have input added to its inputs and input will have this added to its outputs.
@@ -219,7 +218,7 @@ namespace Synchrotron {
 				input.connectSlot(this);
 			}
 
-            /**	\brief	Removes/Disconnects an input to this SynchrotronComponent.
+            /**	\brief	**[Thread safe]** Removes/Disconnects an input to this SynchrotronComponent.
              *
              *	**Ensures both way connection will be removed:**
              *	This will have input removed from its inputs and input will have this removed from its outputs.
@@ -233,7 +232,7 @@ namespace Synchrotron {
 				input.disconnectSlot(this);
 			}
 
-			/**	\brief	Adds/Connects a new output to this SynchrotronComponent.
+			/**	\brief	**[Thread safe]** Adds/Connects a new output to this SynchrotronComponent.
              *
              *	**Ensures both way connection will be made:**
              *	This will have output added to its outputs and output will have this added to its inputs.
@@ -248,7 +247,7 @@ namespace Synchrotron {
 				this->connectSlot(&output);
 			}
 
-			/**	\brief	Removes/Disconnects an output to this SynchrotronComponent.
+			/**	\brief	**[Thread safe]** Removes/Disconnects an output to this SynchrotronComponent.
              *
              *	**Ensures both way connection will be removed:**
              *	This will have output removed from its output and output will have this removed from its inputs.
@@ -269,15 +268,17 @@ namespace Synchrotron {
              */
 			virtual inline void tick() {
 				//LockBlock lock(this);
+				std::bitset<bit_width> prevState = this->state;
 
 				//std::cout << "Ticked\n";
 				for(auto& connection : this->signalInput) {
-					//std::cout << "State = " << ((SynchrotronComponent*) connection)->getState() << "\n";
-					//test :
+					// Change this line to change the logic applied on the states:
 					this->state |= ((SynchrotronComponent*) connection)->getState();
 				}
 
-				//this->emit(); // Directly emit changes to subscribers?
+				// Directly emit changes to subscribers on change
+				if (prevState != this->state)
+					this->emit();
 			}
 
 			/**	\brief	The emit() method will be called after a tick() completes to ensure the flow of new data.

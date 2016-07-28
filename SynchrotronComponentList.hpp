@@ -269,15 +269,17 @@ namespace Synchrotron {
              */
 			virtual inline void tick() {
 				//LockBlock lock(this);
+				std::bitset<bit_width> prevState = this->state;
 
 				//std::cout << "Ticked\n";
 				for(auto& connection : this->signalInput) {
-					//std::cout << "State = " << ((SynchrotronComponent*) connection)->getState() << "\n";
-					//test :
+					// Change this line to change the logic applied on the states:
 					this->state |= ((SynchrotronComponent*) connection)->getState();
 				}
 
-				//this->emit(); // Directly emit changes to subscribers?
+				// Directly emit changes to subscribers on change
+				if (prevState != this->state)
+					this->emit();
 			}
 
 			/**	\brief	The emit() method will be called after a tick() completes to ensure the flow of new data.

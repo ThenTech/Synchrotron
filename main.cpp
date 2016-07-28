@@ -31,8 +31,7 @@
 		==>	std::forward_list<>::remove() is of complexity O(n)
 			whereas std::set<>::erase() uses a LUT with keys generated on insert() and is therefore O(1).
 */
-/*
-	ELEMENTS = 1 000		TIMES = 1 000
+/*	ELEMENTS = 1 000		TIMES = 1 000
 		std::set<> results:				Total time: 1638 ms	(others 0 ms)
 		std::forward_list<> results:	Total time: 2449 ms (others 0 ms, except remove: 1 ms)
 */
