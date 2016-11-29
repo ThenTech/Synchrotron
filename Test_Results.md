@@ -100,7 +100,7 @@
 
 
 ## Conslusion
-An `std::set` has the best overall performance, with the additional ability to prevent duplicates.
+A `std::set` has the best overall performance, with the additional ability to prevent duplicates.
 Through the above tests, we can conclude that the MSVC compiler doesn't keep the same order as MinGW.
 Whereas MinGW sorts the added Objects by their creation (pointers on heap), MSVC stores them semi-randomly.
 Therefor a different solution is needed. In `SynchrotronComponentSetSort`, a custom compare method is used to sort the `set`.
