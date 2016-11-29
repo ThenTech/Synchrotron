@@ -86,14 +86,22 @@
 
 | Parameter | Expected | MinGW 4.9.2 x86 | MSVC 2013 x86 |
 | --- | :---: | :---: | :---: |
-| Kept order when adding with std::init_list	| true | **true** | false    |
-| Kept order when adding with addOutput()	| true | **true** | false    |
+| Kept order when adding with std::init_list	| true | **true** | **true** |
+| Kept order when adding with addOutput()	| true | **true** | **true** |
 | Won't allow duplicates			| true | **true** | **true** |
 
 | Performance Test (10 x 10,000 items) | MinGW Average (ms) | MSVC Average (ms) |
 | --- | :---: | :---: |
 | addOutput()                          |      10 |       2 |
 | emit()                               |       0 |       0 |
-| removeOutput()                       |       9 |       2 |
-| Total time taken                     |     201 |      60 |
-| Total size of signalprovider (bytes) | 600,060 | 280,028 |
+| removeOutput()                       |       9 |       1 |
+| Total time taken                     |     201 |      54 |
+| Total size of signalprovider (bytes) | 640,064 | 320,032 |
+
+
+## Conslusion
+An `std::set` has the best overall performance, with the additional ability to prevent duplicates.
+Through the above tests, we can conclude that the MSVC compiler doesn't keep the same order as MinGW.
+Whereas MinGW sorts the added Objects by their creation (pointers on heap), MSVC stores them semi-randomly.
+Therefor a different solution is needed. In `SynchrotronComponentSetSort`, a custom compare method is used to sort the `set`.
+This function is part of `Mutex`, which contains an id, incremented with each creation of a `SynchrotronComponent`.

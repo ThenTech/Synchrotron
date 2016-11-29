@@ -9,22 +9,6 @@
 
 namespace Synchrotron {
 
-	template <size_t bit_width>
-	class SynchrotronComponentSetSort;
-
-	struct sync_cmp {
-		template <size_t bit_width>
-		bool operator() (const SynchrotronComponentSetSort<bit_width>* lhs, const SynchrotronComponentSetSort<bit_width>* rhs) const{
-			// static id in every SynchrotronComponentSetSort ? and sort on this id?
-			(void) lhs;
-			(void) rhs;
-
-			//std::cout << "lhs: " << lhs << ", rhs: " << rhs << std::endl;
-
-			return lhs == rhs;
-		}
-	};
-
 	/** \brief
 	 *	SynchrotronComponent is the base for all components,
 	 *	offering in and output connections to other SynchrotronComponent.
@@ -45,14 +29,14 @@ namespace Synchrotron {
 			 *
 			 *		Emit this.signal to subscribers in slotOutput.
 			 */
-			std::set<SynchrotronComponentSetSort*, sync_cmp> slotOutput;
+			std::set<SynchrotronComponentSetSort*, Mutex::compare> slotOutput;
 
 			/**	\brief
 			 *	**Signals == inputs**
 			 *
 			 *		Receive tick()s from these subscriptions in signalInput.
 			 */
-			std::set<SynchrotronComponentSetSort*, sync_cmp> signalInput;
+			std::set<SynchrotronComponentSetSort*, Mutex::compare> signalInput;
 
 			/**	\brief	Connect a new slot s:
 			 *		* Add s to this SynchrotronComponentSetSort's outputs.
@@ -194,7 +178,7 @@ namespace Synchrotron {
 			 *	\return	std::set<SynchrotronComponentSetSort*>&
 			 *      Returns a reference set to this SynchrotronComponentSetSort's inputs.
 			 */
-			const std::set<SynchrotronComponentSetSort*, sync_cmp>& getIputs() const {
+			const std::set<SynchrotronComponentSetSort*, Mutex::compare>& getIputs() const {
 				return this->signalInput;
 			}
 
@@ -203,7 +187,7 @@ namespace Synchrotron {
 			 *	\return	std::set<SynchrotronComponentSetSort*>&
 			 *      Returns a reference set to this SynchrotronComponentSetSort's outputs.
 			 */
-			const std::set<SynchrotronComponentSetSort*, sync_cmp>& getOutputs() const {
+			const std::set<SynchrotronComponentSetSort*, Mutex::compare>& getOutputs() const {
 				return this->slotOutput;
 			}
 
@@ -325,7 +309,6 @@ namespace Synchrotron {
 				//std::cout << "Emitted\n";
 			}
 	};
-
 }
 
 

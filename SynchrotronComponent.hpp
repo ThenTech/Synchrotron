@@ -17,14 +17,26 @@ namespace Synchrotron {
     /** \brief Mutex class to lock the current working thread.
      */
 	class Mutex {
+		public:
+			static size_t mutex_id;
+			const size_t idx;
 		private:
 			std::mutex m_mutex;
 		public:
-			Mutex() 				{}
-			virtual ~Mutex() 		{}
-			virtual void lock()		{ m_mutex.lock();		}
-			virtual void unlock()	{ m_mutex.unlock();		}
+			Mutex() : idx(mutex_id++)		{}
+			Mutex(const Mutex&) : Mutex()	{}
+			virtual ~Mutex()				{}
+			virtual void lock()				{ m_mutex.lock();	}
+			virtual void unlock()			{ m_mutex.unlock();	}
+
+			struct compare {
+				inline bool operator() (const Mutex* lhs, const Mutex* rhs) const {
+					return lhs->idx < rhs->idx;
+				}
+			};
 	};
+
+	size_t Mutex::mutex_id = 0;
 
 	/**	\brief
 	 *	Creating a new LockBlock(this) locks the current thread,
