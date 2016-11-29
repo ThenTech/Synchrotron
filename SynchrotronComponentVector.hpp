@@ -1,15 +1,13 @@
-/**
-*	Synchronous component with combined Signals and Slots functionality.
-* 		Loosely based on https://github.com/winglot/Signals
-*/
-#ifndef SYNCHROTRONCOMPONENTList_HPP
-#define SYNCHROTRONCOMPONENTList_HPP
+#ifndef SYNCHROTRONCOMPONENTVECTOR_HPP
+#define SYNCHROTRONCOMPONENTVECTOR_HPP
+
 
 #include <iostream> // For testing for now
 
 #include "SynchrotronComponent.hpp"
 #include <bitset>
-#include <list>
+#include <vector>
+#include <algorithm>
 
 namespace Synchrotron {
 
@@ -19,9 +17,9 @@ namespace Synchrotron {
 	 *
 	 *	\param	bit_width
 	 *		This template argument specifies the width of the internal bitset state.
-     */
+	 */
 	template <size_t bit_width>
-	class SynchrotronComponentList : public Mutex {
+	class SynchrotronComponentVector : public Mutex {
 		private:
 			/**	\brief
 			 *	The current internal state of bits in this component (default output).
@@ -33,52 +31,52 @@ namespace Synchrotron {
 			 *
 			 *		Emit this.signal to subscribers in slotOutput.
 			 */
-			std::list<SynchrotronComponentList*> slotOutput;
+			std::vector<SynchrotronComponentVector*> slotOutput;
 
 			/**	\brief
 			 *	**Signals == inputs**
 			 *
 			 *		Receive tick()s from these subscriptions in signalInput.
 			 */
-			std::list<SynchrotronComponentList*> signalInput;
+			std::vector<SynchrotronComponentVector*> signalInput;
 
-            /**	\brief	Connect a new slot s:
-             *		* Add s to this SynchrotronComponent's outputs.
-             *		* Add this to s's inputs.
-             *
-             *	\param	s
+			/**	\brief	Connect a new slot s:
+			 *		* Add s to this SynchrotronComponent's outputs.
+			 *		* Add this to s's inputs.
+			 *
+			 *	\param	s
 			 *		The SynchrotronComponent to connect.
-             */
-			inline void connectSlot(SynchrotronComponentList* s) {
+			 */
+			inline void connectSlot(SynchrotronComponentVector* s) {
 				//LockBlock lock(this);
 
 				this->slotOutput.push_back(s);
 				s->signalInput.push_back(this);
 			}
 
-            /**	\brief	Disconnect a slot s:
-             *		* Remove s from this SynchrotronComponent's outputs.
-             *		* Remove this from s's inputs.
-             *
-             *	\param	s
+			/**	\brief	Disconnect a slot s:
+			 *		* Remove s from this SynchrotronComponent's outputs.
+			 *		* Remove this from s's inputs.
+			 *
+			 *	\param	s
 			 *		The SynchrotronComponent to disconnect.
-             */
-			inline void disconnectSlot(SynchrotronComponentList* s) {
+			 */
+			inline void disconnectSlot(SynchrotronComponentVector* s) {
 				//LockBlock lock(this);
 
-				this->slotOutput.remove(s);
-				s->signalInput.remove(this);
+				this->slotOutput.erase(std::remove(this->slotOutput.begin(), this->slotOutput.end(), s), this->slotOutput.end());
+				s->signalInput.erase(std::remove(this->signalInput.begin(), this->signalInput.end(), s), this->signalInput.end());
 			}
 
 		public:
-            /** \brief	Default constructor
-             *
-             *	\param	initial_value
+			/** \brief	Default constructor
+			 *
+			 *	\param	initial_value
 			 *		The initial state of the internal bitset.
 			 *	\param	bit_width
 			 *		The size of the internal width of the bitset.
-             */
-			SynchrotronComponentList(size_t initial_value = 0) : state(initial_value) {}
+			 */
+			SynchrotronComponentVector(size_t initial_value = 0) : state(initial_value) {}
 
 			/**	\brief
 			 *	Copy constructor
@@ -90,17 +88,17 @@ namespace Synchrotron {
 			 *	\param	duplicateAll_IO
 			 *		Specifies whether to only copy inputs (false) or outputs as well (true).
 			 */
-			SynchrotronComponentList(const SynchrotronComponentList& sc, bool duplicateAll_IO = false) : SynchrotronComponentList() {
+			SynchrotronComponentVector(const SynchrotronComponentVector& sc, bool duplicateAll_IO = false) : SynchrotronComponentVector() {
 				//LockBlock lock(this);
 
 				// Copy subscriptions
-				for(auto& sender : sc.getIputs()) {
+				for(auto& sender : sc.signalInput) {
 					this->addInput(*sender);
 				}
 
 				if (duplicateAll_IO) {
 					// Copy subscribers
-					for(auto& connection : sc.getOutputs()) {
+					for(auto& connection : sc.slotOutput) {
 						this->addOutput(*connection);
 					}
 				}
@@ -116,9 +114,9 @@ namespace Synchrotron {
 			 *	\param	outputList
 			 *		The list of SynchrotronComponents to connect as output..
 			 */
-			SynchrotronComponentList(std::initializer_list<SynchrotronComponentList*> inputList,
-								 std::initializer_list<SynchrotronComponentList*> outputList = {})
-									: SynchrotronComponentList() {
+			SynchrotronComponentVector(std::initializer_list<SynchrotronComponentVector*> inputList,
+								 std::initializer_list<SynchrotronComponentVector*> outputList = {})
+									: SynchrotronComponentVector() {
 				this->addInput(inputList);
 				this->addOutput(outputList);
 			}
@@ -126,30 +124,32 @@ namespace Synchrotron {
 			/** \brief	Default destructor
 			 *
 			 *		When called, will disconnect all in and output connections to this SynchrotronComponent.
-             */
-			~SynchrotronComponentList() {
+			 */
+			~SynchrotronComponentVector() {
 				LockBlock lock(this);
 
-				// Disconnect all Slots
-				for(auto& connection : this->slotOutput) {
-					connection->signalInput.remove(this);
-					//delete connection; //?
-				}
+//				// Disconnect all Slots
+//				for(auto& connection : this->slotOutput) {
+//					//connection->signalInput.erase(this);
+//					//delete connection; //?
+//					connection->signalInput.erase(std::remove(connection->signalInput.begin(), connection->signalInput.end(), *this), connection->signalInput.end());
+//				}
 
-				// Disconnect all Signals
-				for(auto &sender: this->signalInput) {
-					sender->slotOutput.remove(this);
-				}
+//				// Disconnect all Signals
+//				for(auto &sender: this->signalInput) {
+//					//sender->signalInput.erase(this);
+//					sender->slotOutput.erase(std::remove(sender->signalInput.begin(), sender->signalInput.end(), *this), sender->signalInput.end());
+//				}
 
 				this->slotOutput.clear();
 				this->signalInput.clear();
 			}
 
-            /**	\brief	Gets this SynchrotronComponent's bit width.
-             *
-             *	\return	size_t
-             *      Returns the bit width of the internal bitset.
-             */
+			/**	\brief	Gets this SynchrotronComponent's bit width.
+			 *
+			 *	\return	size_t
+			 *      Returns the bit width of the internal bitset.
+			 */
 			size_t getBitWidth() const {
 				return bit_width;
 			}
@@ -169,41 +169,41 @@ namespace Synchrotron {
 //			}
 
 			/**	\brief	Gets this SynchrotronComponent's state.
-             *
-             *	\return	std::bitset<bit_width>
-             *      Returns the internal bitset.
-             */
+			 *
+			 *	\return	std::bitset<bit_width>
+			 *      Returns the internal bitset.
+			 */
 			inline std::bitset<bit_width> getState() const {
 				return this->state;
 			}
 
 			/**	\brief	Gets the SynchrotronComponent's input connections.
-             *
-             *	\return	std::set<SynchrotronComponent*>&
-             *      Returns a reference set to this SynchrotronComponent's inputs.
-             */
-			const std::list<SynchrotronComponentList*>& getIputs() const {
+			 *
+			 *	\return	std::set<SynchrotronComponent*>&
+			 *      Returns a reference set to this SynchrotronComponent's inputs.
+			 */
+			const std::vector<SynchrotronComponentVector*>& getIputs() const {
 				return this->signalInput;
 			}
 
 			/**	\brief	Gets the SynchrotronComponent's output connections.
-             *
-             *	\return	std::set<SynchrotronComponent*>&
-             *      Returns a reference set to this SynchrotronComponent's outputs.
-             */
-			const std::list<SynchrotronComponentList*>& getOutputs() const {
+			 *
+			 *	\return	std::set<SynchrotronComponent*>&
+			 *      Returns a reference set to this SynchrotronComponent's outputs.
+			 */
+			const std::vector<SynchrotronComponentVector*>& getOutputs() const {
 				return this->slotOutput;
 			}
 
-            /**	\brief	Adds/Connects a new input to this SynchrotronComponent.
-             *
-             *	**Ensures both way connection will be made:**
-             *	This will have input added to its inputs and input will have this added to its outputs.
-             *
-             *	\param	input
-             *		The SynchrotronComponent to connect as input.
-             */
-			void addInput(SynchrotronComponentList& input) {
+			/**	\brief	Adds/Connects a new input to this SynchrotronComponent.
+			 *
+			 *	**Ensures both way connection will be made:**
+			 *	This will have input added to its inputs and input will have this added to its outputs.
+			 *
+			 *	\param	input
+			 *		The SynchrotronComponent to connect as input.
+			 */
+			void addInput(SynchrotronComponentVector& input) {
 				LockBlock lock(this);
 
 				// deprecated? //if (!this->hasSameWidth(input)) return false;
@@ -217,54 +217,54 @@ namespace Synchrotron {
 			 *	\param	inputList
 			 *		The list of SynchrotronComponents to connect as input.
 			 */
-			void addInput(std::initializer_list<SynchrotronComponentList*> inputList) {
+			void addInput(std::initializer_list<SynchrotronComponentVector*> inputList) {
 				for(auto connection : inputList)
 					this->addInput(*connection);
 			}
 
-            /**	\brief	Removes/Disconnects an input to this SynchrotronComponent.
-             *
-             *	**Ensures both way connection will be removed:**
-             *	This will have input removed from its inputs and input will have this removed from its outputs.
-             *
-             *	\param	input
-             *		The SynchrotronComponent to disconnect as input.
-             */
-			void removeInput(SynchrotronComponentList& input) {
+			/**	\brief	Removes/Disconnects an input to this SynchrotronComponent.
+			 *
+			 *	**Ensures both way connection will be removed:**
+			 *	This will have input removed from its inputs and input will have this removed from its outputs.
+			 *
+			 *	\param	input
+			 *		The SynchrotronComponent to disconnect as input.
+			 */
+			void removeInput(SynchrotronComponentVector& input) {
 				LockBlock lock(this);
 
 				input.disconnectSlot(this);
 			}
 
 			/**	\brief	Adds/Connects a new output to this SynchrotronComponent.
-             *
-             *	**Ensures both way connection will be made:**
-             *	This will have output added to its outputs and output will have this added to its inputs.
-             *
-             *	\param	output
-             *		The SynchrotronComponent to connect as output.
-             */
-			void addOutput(SynchrotronComponentList& output) {
+			 *
+			 *	**Ensures both way connection will be made:**
+			 *	This will have output added to its outputs and output will have this added to its inputs.
+			 *
+			 *	\param	output
+			 *		The SynchrotronComponent to connect as output.
+			 */
+			void addOutput(SynchrotronComponentVector& output) {
 				LockBlock lock(this);
 
 				// deprecated? //if (!this->hasSameWidth(*output)) return false;
 				this->connectSlot(&output);
 			}
 
-			void addOutput(std::initializer_list<SynchrotronComponentList*> outputList) {
+			void addOutput(std::initializer_list<SynchrotronComponentVector*> outputList) {
 				for(auto connection : outputList)
 					this->addOutput(*connection);
 			}
 
 			/**	\brief	Removes/Disconnects an output to this SynchrotronComponent.
-             *
-             *	**Ensures both way connection will be removed:**
-             *	This will have output removed from its output and output will have this removed from its inputs.
-             *
-             *	\param	output
-             *		The SynchrotronComponent to disconnect as output.
-             */
-			void removeOutput(SynchrotronComponentList& output) {
+			 *
+			 *	**Ensures both way connection will be removed:**
+			 *	This will have output removed from its output and output will have this removed from its inputs.
+			 *
+			 *	\param	output
+			 *		The SynchrotronComponent to disconnect as output.
+			 */
+			void removeOutput(SynchrotronComponentVector& output) {
 				LockBlock lock(this);
 
 				this->disconnectSlot(&output);
@@ -272,9 +272,9 @@ namespace Synchrotron {
 
 			/**	\brief	The tick() method will be called when one of this SynchrotronComponent's inputs issues an emit().
 			 *
-             *	\return	virtual void
-             *		This method should be implemented by a derived class.
-             */
+			 *	\return	virtual void
+			 *		This method should be implemented by a derived class.
+			 */
 			virtual void tick() {
 				//LockBlock lock(this);
 				std::bitset<bit_width> prevState = this->state;
@@ -282,7 +282,7 @@ namespace Synchrotron {
 				//std::cout << "Ticked\n";
 				for(auto& connection : this->signalInput) {
 					// Change this line to change the logic applied on the states:
-					this->state |= ((SynchrotronComponentList*) connection)->getState();
+					this->state |= ((SynchrotronComponentVector*) connection)->getState();
 				}
 
 				// Directly emit changes to subscribers on change
@@ -294,9 +294,9 @@ namespace Synchrotron {
 			 *
 			 *	Loops over all outputs and calls tick().
 			 *
-             *	\return	virtual void
-             *		This method can be re-implemented by a derived class.
-             */
+			 *	\return	virtual void
+			 *		This method can be re-implemented by a derived class.
+			 */
 			virtual inline void emit() {
 				//LockBlock lock(this);
 
@@ -309,5 +309,4 @@ namespace Synchrotron {
 
 }
 
-
-#endif // SYNCHROTRONCOMPONENTList_HPP
+#endif // SYNCHROTRONCOMPONENTVECTOR_HPP

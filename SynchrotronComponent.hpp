@@ -21,7 +21,6 @@ namespace Synchrotron {
 			std::mutex m_mutex;
 		public:
 			Mutex() 				{}
-			Mutex(const Mutex&) 	{}
 			virtual ~Mutex() 		{}
 			virtual void lock()		{ m_mutex.lock();		}
 			virtual void unlock()	{ m_mutex.unlock();		}
@@ -118,17 +117,17 @@ namespace Synchrotron {
 			 *		Specifies whether to only copy inputs (false) or outputs as well (true).
 			 */
 			SynchrotronComponent(const SynchrotronComponent& sc, bool duplicateAll_IO = false) : SynchrotronComponent() {
-				LockBlock lock(this);
+				//LockBlock lock(this);
 
 				// Copy subscriptions
 				for(auto& sender : sc.signalInput) {
-					sender->connectSlot(this);
+					this->addInput(*sender);
 				}
 
 				if (duplicateAll_IO) {
 					// Copy subscribers
 					for(auto& connection : sc.slotOutput) {
-						this->connectSlot(connection);
+						this->addOutput(*connection);
 					}
 				}
 			}
@@ -177,7 +176,7 @@ namespace Synchrotron {
              *	\return	size_t
              *      Returns the bit width of the internal bitset.
              */
-			inline size_t getBitWidth() {
+			size_t getBitWidth() const {
 				return bit_width;
 			}
 
@@ -209,7 +208,7 @@ namespace Synchrotron {
              *	\return	std::set<SynchrotronComponent*>&
              *      Returns a reference set to this SynchrotronComponent's inputs.
              */
-			const std::set<SynchrotronComponent*>& getIputs() {
+			const std::set<SynchrotronComponent*>& getInputs() const {
 				return this->signalInput;
 			}
 
@@ -218,7 +217,7 @@ namespace Synchrotron {
              *	\return	std::set<SynchrotronComponent*>&
              *      Returns a reference set to this SynchrotronComponent's outputs.
              */
-			const std::set<SynchrotronComponent*>& getOutputs() {
+			const std::set<SynchrotronComponent*>& getOutputs() const {
 				return this->slotOutput;
 			}
 
@@ -230,7 +229,7 @@ namespace Synchrotron {
              *	\param	input
              *		The SynchrotronComponent to connect as input.
              */
-			void addInput(SynchrotronComponent& input) {
+			virtual void addInput(SynchrotronComponent& input) {
 				LockBlock lock(this);
 
 				// deprecated? //if (!this->hasSameWidth(input)) return false;
@@ -309,7 +308,7 @@ namespace Synchrotron {
              *	\return	virtual void
              *		This method should be implemented by a derived class.
              */
-			virtual inline void tick() {
+			virtual void tick() {
 				//LockBlock lock(this);
 				std::bitset<bit_width> prevState = this->state;
 
