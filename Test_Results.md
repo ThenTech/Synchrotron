@@ -2,7 +2,7 @@
 
 ## Functional results
 
-- ### Using `std::set`
+### Using `std::set`
 
 | Functional test | Expected | MinGW 4.9.2 x86 | MSVC 2013 x86 |
 | --- | :---: | :---: | :---: |
@@ -18,7 +18,7 @@
 | Total time taken                     |     200 |      61 |
 | Total size of signalprovider (bytes) | 600,060 | 280,028 |
 
-- ### Using `std::list`
+### Using `std::list`
 
 | Parameter | Expected | MinGW 4.9.2 x86 | MSVC 2013 x86 |
 | --- | :---: | :---: | :---: |
@@ -34,7 +34,7 @@
 | Total time taken                     |    1406 |    1181 |
 | Total size of signalprovider (bytes) | 280,028 | 280,028 |
 
-- ### Using `std::forward_list`
+### Using `std::forward_list`
 
 | Parameter | Expected | MinGW 4.9.2 x86 | MSVC 2013 x86 |
 | --- | :---: | :---: | :---: |
@@ -50,7 +50,7 @@
 | Total time taken                     |    1125 |     917 |
 | Total size of signalprovider (bytes) | 200,020 | 200,020 |
 
-- ### Using `std::vector`
+### Using `std::vector`
 
 | Parameter | Expected | MinGW 4.9.2 x86 | MSVC 2013 x86 |
 | --- | :---: | :---: | :---: |
@@ -66,7 +66,7 @@
 | Total time taken                     |     417 |     322 |
 | Total size of signalprovider (bytes) | 360,036 | 360,036 |
 
-- ### Using `std::set` with `.insert( .end() , _val)`
+### Using `std::set` with `.insert( .end() , _val)`
 
 | Parameter | Expected | MinGW 4.9.2 x86 | MSVC 2013 x86 |
 | --- | :---: | :---: | :---: |
@@ -82,7 +82,7 @@
 | Total time taken                     |     192 |      54 |
 | Total size of signalprovider (bytes) | 600,060 | 280,028 |
 
-- ### Using `std::set` with custom comparer
+### Using `std::set` with custom comparer
 
 | Parameter | Expected | MinGW 4.9.2 x86 | MSVC 2013 x86 |
 | --- | :---: | :---: | :---: |
