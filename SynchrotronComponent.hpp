@@ -15,12 +15,15 @@
 namespace Synchrotron {
 
     /** \brief Mutex class to lock the current working thread.
+	 *
+	 *	Includes a `static size_t` with an increment when a new instance is created.
+	 *	This is used in a custom compare method  `Mutex::compare`.
      */
 	class Mutex {
-		public:
+		protected:
 			static size_t mutex_id;
-			const size_t idx;
 		private:
+			const size_t idx;
 			std::mutex m_mutex;
 		public:
 			Mutex() : idx(mutex_id++)		{}
